@@ -14,7 +14,7 @@ public interface BookServices {
 	
 	void deleteById(String id) throws Exception;
 	
-	Book finOneById (String id);
+	Book findOneById (String id);
 	
 	List<Book> findAll();
 	
