@@ -7,6 +7,6 @@ import com.erickvasquez.documentos.models.entities.User;
 public interface AuthServices {
 	
 	User LogIn(LoginDTO data);
-	
 	void changePassword(ChagePasswordDTO data) throws Exception;
+
 }

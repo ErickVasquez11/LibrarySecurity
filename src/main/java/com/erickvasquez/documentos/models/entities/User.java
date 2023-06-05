@@ -44,7 +44,7 @@ public class User {
 	
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private List<BookPres> bookPress;
+	private List<BookPres> bookPres;
 	
 	public User(String username, String email, String password, String name) {
 		super();

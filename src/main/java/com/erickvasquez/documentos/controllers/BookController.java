@@ -122,7 +122,7 @@ public class BookController {
 		
 		// TODO: use response DTO
 		
-		List<BookPres> bookPres = user.getBookPress();		
+		List<BookPres> bookPres = user.getBookPres();		
 		return new ResponseEntity<>(bookPres, HttpStatus.OK);
 	}
 	

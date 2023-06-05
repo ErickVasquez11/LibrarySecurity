@@ -29,22 +29,22 @@ import jakarta.validation.Valid;
 public class AuthController {
 
 	
-	    // 1. registrarse
-		// 2. ruta que logee, usuario o correo, contrasena
-		// 3. dado un usuario permita modificar el nombre
-		// 4. cambiar contrasena
-		// TODO: 5. añadir campo active y hacer el toggle
+	    //  registrarse
+		//  ruta que logee, usuario o correo, contrasena
+		//  dado un usuario permita modificar el nombre
+		//  cambiar contrasena
+		// TODO:  añadir campo active y hacer el toggle
 			
 		@Autowired
-		private AuthServices authService;
+		private AuthServices authServices;
 		
 		@Autowired
-		private UserServices userService;
+		private UserServices userServices;
 		
 		@Autowired
 		private RequestErrorHandler errorHandler;
 		
-		@PostMapping("/log-in")
+		@PostMapping("/login")
 		private ResponseEntity<?> logIn(@ModelAttribute @Valid LoginDTO data, BindingResult validations) {
 			
 			if (validations.hasErrors()) {
@@ -52,12 +52,12 @@ public class AuthController {
 						errorHandler.mapErrors(validations.getFieldErrors()), HttpStatus.BAD_REQUEST);
 			}
 			
-			// User user = authService.logIn(data);
-			User user = userService.findOneById(data.getId());
+			User user = authServices.LogIn(data);
+			//User user = userServices.findOneById(data.getId());
 			if (user == null)
 				return new ResponseEntity<>("invalid credentials", HttpStatus.NOT_FOUND);
 			
-			Boolean validPassword = userService.comparePassword(data.getPassword(), user.getPassword());
+			Boolean validPassword = userServices.comparePassword(data.getPassword(), user.getPassword());
 			if (!validPassword)
 				return new ResponseEntity<>("invalid credentials", HttpStatus.UNAUTHORIZED);
 			
@@ -67,7 +67,7 @@ public class AuthController {
 		@PostMapping("")
 		private ResponseEntity<?> register(@ModelAttribute RegisterUserDTO data) {
 			try {
-				userService.register(data);
+				userServices.register(data);
 				return new ResponseEntity<>("user created", HttpStatus.CREATED);
 			} catch (Exception e) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -79,12 +79,12 @@ public class AuthController {
 		@PutMapping("")
 		private ResponseEntity<?> udpateUserName(@ModelAttribute UpdateUserDTO data) {
 			try {
-				User user = userService.findOneById(data.getId());
+				User user = userServices.findOneById(data.getId());
 				
 				if (user == null)
 					return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 				
-				userService.update(data);
+				userServices.update(data);
 				return new ResponseEntity<>("user updated", HttpStatus.OK);
 			} catch (Exception e) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -95,12 +95,12 @@ public class AuthController {
 		@PatchMapping("/change-password")
 		private ResponseEntity<?> changePassword(@ModelAttribute ChagePasswordDTO data) {
 			try {
-				User user = userService.findOneById(data.getId());
+				User user = userServices.findOneById(data.getId());
 				if (user == null)
 					return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 				
 				// TODO: notify if current password is incorrect
-				authService.changePassword(data);
+				authServices.changePassword(data);
 				return new ResponseEntity<>("password changed", HttpStatus.OK);
 			} catch (Exception e) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
